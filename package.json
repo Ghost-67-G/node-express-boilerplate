@@ -4,15 +4,15 @@
   "description": "Create a Node.js app for building production-ready RESTful APIs using Express, by running one command",
   "bin": "bin/createNodejsApp.js",
   "main": "src/index.js",
-  "repository": "https://github.com/hagopj13/node-express-boilerplate.git",
-  "author": "Hagop Jamkojian <hagopj13@gmail.com>",
+  "repository": "https://github.com/Ghost-67-G/node-express-boilerplate.git",
+  "author": "Ayan Naseer <ayannaseerg67@gmail.com>",
   "license": "MIT",
   "engines": {
     "node": ">=12.0.0"
   },
   "scripts": {
     "start": "pm2 start ecosystem.config.json --no-daemon",
-    "dev": "cross-env NODE_ENV=development nodemon src/index.js",
+    "dev": "env-cmd -f .env.development cross-env NODE_ENV=development nodemon src/index.js",
     "test": "jest -i --colors --verbose --detectOpenHandles",
     "test:watch": "jest -i --watchAll",
     "coverage": "jest -i --coverage",
@@ -84,6 +84,7 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-security": "^1.4.0",
     "faker": "^5.1.0",
+    "env-cmd": "^10.1.0",
     "husky": "7.0.4",
     "jest": "^26.0.1",
     "lint-staged": "^11.0.0",

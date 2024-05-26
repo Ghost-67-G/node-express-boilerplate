@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
-const { toJSON, paginate } = require('../../../models/plugins');
+const { toJSON, paginate } = require('./plugins');
 
 const noteSchema = new Schema(
   {

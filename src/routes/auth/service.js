@@ -1,9 +1,9 @@
 const httpStatus = require('http-status');
-const tokenService = require('../../../services/token.service');
-const userService = require('../../../services/user.service');
-const Token = require('../../../models/token.model');
-const ApiError = require('../../../utils/ApiError');
-const { tokenTypes } = require('../../../config/tokens');
+const tokenService = require('../../services/token.service');
+const userService = require('../../services/user.service');
+const Token = require('../../models/token.model');
+const ApiError = require('../../utils/ApiError');
+const { tokenTypes } = require('../../config/tokens');
 
 /**
  * Login with username and password

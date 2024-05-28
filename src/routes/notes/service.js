@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
-const Note = require('./model');
-const ApiError = require('../../../utils/ApiError');
+const Note = require('../../models/note.model');
+const ApiError = require('../../utils/ApiError');
 
 /**
  * Create a note

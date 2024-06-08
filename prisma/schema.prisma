@@ -1,0 +1,49 @@
+// schema.prisma
+
+datasource db {
+  provider = "postgresql" // or "mysql", "sqlite" depending on your setup
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  user
+  admin
+  // Add other roles if needed
+}
+
+
+model User {
+  id          String   @id @default(uuid()) @map("_id")
+  email       String   @unique
+  role        Role     @default(user)
+  photoURL    String?
+  address     String?
+  displayName String
+  given_name  String
+  family_name String
+  username    String
+  phone_number String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  notes Note[]
+
+  @@map("users")
+  @@index([email], name: "email_index")
+}
+
+model Note {
+  id             Int         @id @default(autoincrement())
+  user_id        String
+  title          String
+  content        String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  user           User        @relation(fields: [user_id], references: [id])
+  @@index([user_id], name: "idx_user_id")
+}

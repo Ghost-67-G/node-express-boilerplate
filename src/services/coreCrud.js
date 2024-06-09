@@ -1,10 +1,10 @@
 const { PrismaClient } = require('@prisma/client');
-const pick = require('../utils/pick'); 
+const pick = require('../utils/pick');
 
 class DBService {
-  constructor(tableName, uniqueFields, uniques) {
+  constructor(tableName, validFields, uniques) {
     this.tableName = tableName;
-    this.uniqueFields = uniqueFields;
+    this.validFields = validFields;
     this.uniques = uniques;
     this.prisma = new PrismaClient();
   }
@@ -12,7 +12,7 @@ class DBService {
   async create(data) {
     return this.prisma[this.tableName].create({
       data: {
-        ...pick(data, this.uniqueFields),
+        ...pick(data, this.validFields),
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -22,7 +22,7 @@ class DBService {
   async createMany(data) {
     return this.prisma[this.tableName].createMany({
       data: data.map((item) => ({
-        ...pick(item, this.uniqueFields),
+        ...pick(item, this.validFields),
         createdAt: new Date(),
         updatedAt: new Date(),
       })),
@@ -43,21 +43,20 @@ class DBService {
 
   async query(filter, options) {
     const { sortBy = '', limit: pageSize = 10, page = 1, select = {}, include = {} } = options;
-
     const orderBy = sortBy.split(',').reduce((acc, sortOption) => {
       const [key, order] = sortOption.split(':');
       acc[key] = order === 'desc' ? 'desc' : 'asc';
       return acc;
     }, {});
 
-    const whereConditions = Object.entries(filter).reduce((conditions, [key, value]) => {
+    const whereConditions = Object.entries(filter).reduce((acc, [key, value]) => {
       if (key.includes('.')) {
         const [field, operator] = key.split('.');
-        conditions[field] = { [operator]: value };
+        acc[field] = { [operator]: value };
       } else {
-        conditions[key] = value;
+        acc[key] = value;
       }
-      return conditions;
+      return acc;
     }, {});
 
     const offset = (page - 1) * pageSize;
@@ -89,7 +88,7 @@ class DBService {
     return this.prisma[this.tableName].update({
       where: { [this.uniques[index]]: identifier },
       data: {
-        ...pick(data, this.uniqueFields),
+        ...pick(data, this.validFields),
         updatedAt: new Date(),
       },
     });
@@ -100,18 +99,6 @@ class DBService {
       where: { [this.uniques[index]]: identifier },
     });
     return { message: `${this.tableName} deleted successfully`, status: 200 };
-  }
-
-  module() {
-    return {
-      create: this.create.bind(this),
-      read: this.read.bind(this),
-      update: this.update.bind(this),
-      delete: this.delete.bind(this),
-      query: this.query.bind(this),
-      createMany: this.createMany.bind(this),
-      readByKey: this.readByKey.bind(this),
-    };
   }
 }
 

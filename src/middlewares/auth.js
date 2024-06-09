@@ -23,7 +23,7 @@ const validateAccessToken = async (req, res, next) => {
     if (!user) {
       const _user = await getUser(req.auth.sub);
       user = await userService.createUser({
-        _id: _user.user_id || _user.uid,
+        id: _user.user_id || _user.uid,
         photoURL: _user.photoURL,
         address: _user.Address,
         displayName: _user.displayName,

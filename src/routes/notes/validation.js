@@ -1,60 +1,51 @@
 const Joi = require('joi');
-const { password } = require('../../validations/custom.validation');
 
-const register = {
+const createNote = {
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().custom(password),
-    name: Joi.string().required(),
+    title: Joi.string().required(),
+    content: Joi.string().required(),
   }),
 };
 
-const login = {
-  body: Joi.object().keys({
-    email: Joi.string().required(),
-    password: Joi.string().required(),
-  }),
-};
-
-const logout = {
-  body: Joi.object().keys({
-    refreshToken: Joi.string().required(),
-  }),
-};
-
-const refreshTokens = {
-  body: Joi.object().keys({
-    refreshToken: Joi.string().required(),
-  }),
-};
-
-const forgotPassword = {
-  body: Joi.object().keys({
-    email: Joi.string().email().required(),
-  }),
-};
-
-const resetPassword = {
+const getNotes = {
   query: Joi.object().keys({
-    token: Joi.string().required(),
-  }),
-  body: Joi.object().keys({
-    password: Joi.string().required().custom(password),
+    title: Joi.string(),
+    createdAt: Joi.date(),
+    updatedAt: Joi.date(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
   }),
 };
 
-const verifyEmail = {
-  query: Joi.object().keys({
-    token: Joi.string().required(),
+const getNote = {
+  params: Joi.object().keys({
+    noteId: Joi.string(),
+  }),
+};
+
+const updateNote = {
+  params: Joi.object().keys({
+    noteId: Joi.required(),
+  }),
+  body: Joi.object()
+    .keys({
+      title: Joi.string(),
+      content: Joi.string(),
+    })
+    .min(1),
+};
+
+const deleteNote = {
+  params: Joi.object().keys({
+    noteId: Joi.string(),
   }),
 };
 
 module.exports = {
-  register,
-  login,
-  logout,
-  refreshTokens,
-  forgotPassword,
-  resetPassword,
-  verifyEmail,
+  createNote,
+  getNotes,
+  getNote,
+  updateNote,
+  deleteNote,
 };

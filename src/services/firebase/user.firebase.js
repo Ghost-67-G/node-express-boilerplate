@@ -1,7 +1,25 @@
+/* eslint-disable no-await-in-loop */
 // const XLSX = require('xlsx');
 const ApiError = require('../../utils/ApiError');
 const admin = require('../../config/firebase');
 // const db = admin.database();
+
+/**
+ * Retrieves a user from Firebase.
+ *
+ * @param {string} uid - The unique identifier of the user.
+ * @param {string} [tenantId=''] - The tenant ID of the user. Defaults to an empty string.
+ * @return {Promise<User>} The user object retrieved from Firebase.
+ * @throws {Error} Throws an error if there is an issue retrieving the user.
+ */
+const getUser = async (uid) => {
+  try {
+    const user = await admin.auth().getUser(uid);
+    return user;
+  } catch (error) {
+    throw new Error('Error getting user from Firebase');
+  }
+};
 /**
  * Creates a new user with the provided body data.
  *
@@ -30,22 +48,6 @@ const createUser = async (body) => {
       throw new Error(error.code);
     }
     throw new Error(error.message || 'Error creating user in Firebase');
-  }
-};
-/**
- * Retrieves a user from Firebase.
- *
- * @param {string} uid - The unique identifier of the user.
- * @param {string} [tenantId=''] - The tenant ID of the user. Defaults to an empty string.
- * @return {Promise<User>} The user object retrieved from Firebase.
- * @throws {Error} Throws an error if there is an issue retrieving the user.
- */
-const getUser = async (uid) => {
-  try {
-    const user = await admin.auth().getUser(uid);
-    return user;
-  } catch (error) {
-    throw new Error('Error getting user from Firebase');
   }
 };
 /**
@@ -119,8 +121,8 @@ const importUsers = async (usersData) => {
   const uniqueUsers = [];
   const emailSet = new Set();
 
+  // eslint-disable-next-line no-restricted-syntax
   for (const user of usersData) {
-    // Check if the email is unique within the array
     if (!emailSet.has(user.email)) {
       emailSet.add(user.email);
 
@@ -129,17 +131,13 @@ const importUsers = async (usersData) => {
         validationErrors.push(user);
       } catch (error) {
         if (error.code === 'auth/user-not-found') {
-          // If the error is 'auth/user-not-found', the user is unique
-          // Add the user to the uniqueUsers array
           uniqueUsers.push(user);
         } else {
-          // If there's an unexpected error, log it and throw it
           console.error('Error checking for duplicate user:', error);
           throw error;
         }
       }
     } else {
-      // If the email is not unique within the array, add to validationErrors
       validationErrors.push(user);
     }
   }

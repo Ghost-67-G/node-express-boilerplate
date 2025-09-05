@@ -1,8 +1,8 @@
 import httpStatus from 'http-status';
+import { Request, Response } from 'express';
 import pick from '../../utils/pick';
 import catchAsync from '../../utils/catchAsync';
 import * as noteService from './service';
-import { Request, Response } from 'express';
 
 export const create = catchAsync(async (req: Request, res: Response) => {
   const note = await noteService.createNote(req.body);

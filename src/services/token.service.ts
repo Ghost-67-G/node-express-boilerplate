@@ -75,11 +75,4 @@ const generateVerifyEmailToken = async (user: any) => {
   return verifyEmailToken;
 };
 
-export {
-  generateToken,
-  saveToken,
-  verifyToken,
-  generateAuthTokens,
-  generateResetPasswordToken,
-  generateVerifyEmailToken,
-};
+export { generateToken, saveToken, verifyToken, generateAuthTokens, generateResetPasswordToken, generateVerifyEmailToken };

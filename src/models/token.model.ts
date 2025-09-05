@@ -7,9 +7,7 @@ export interface ITokenDocument extends Omit<IToken, '_id'>, Document {
   // Remove _id from IToken to avoid conflict with Document._id
 }
 
-interface ITokenModel extends Model<ITokenDocument> {
-  // Add any static methods here if needed
-}
+type ITokenModel = Model<ITokenDocument>;
 
 const tokenSchema = new Schema<ITokenDocument>(
   {

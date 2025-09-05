@@ -70,10 +70,7 @@ const userSchema = new Schema<IUserDocument>(
  * @param excludeUserId - The id of the user to be excluded
  * @returns Promise<boolean>
  */
-userSchema.statics.isEmailTaken = async function (
-  email: string,
-  excludeUserId?: string
-): Promise<boolean> {
+userSchema.statics.isEmailTaken = async function (email: string, excludeUserId?: string): Promise<boolean> {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;
 };
@@ -84,14 +81,12 @@ userSchema.statics.isEmailTaken = async function (
  * @returns Promise<boolean>
  */
 userSchema.methods.isPasswordMatch = async function (password: string): Promise<boolean> {
-  const user = this;
-  return bcrypt.compare(password, user.password);
+  return bcrypt.compare(password, this.password);
 };
 
 userSchema.pre('save', async function (next) {
-  const user = this;
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8);
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 8);
   }
   next();
 });

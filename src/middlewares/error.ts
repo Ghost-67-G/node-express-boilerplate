@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 import httpStatus from 'http-status';
+import { Request, Response, NextFunction } from 'express';
 import config from '../config/config';
 import logger from '../config/logger';
 import ApiError from '../utils/ApiError';
-import { Request, Response, NextFunction } from 'express';
 
 const errorConverter = (err: any, _req: Request, _res: Response, next: NextFunction) => {
   let error = err;
@@ -16,7 +16,7 @@ const errorConverter = (err: any, _req: Request, _res: Response, next: NextFunct
   next(error);
 };
 
-const errorHandler = (err: ApiError, _req: Request, res: Response, _next: NextFunction) => {
+const errorHandler = (err: ApiError, _req: Request, res: Response) => {
   let { statusCode, message } = err;
   if (config.env === 'production' && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;

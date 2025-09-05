@@ -8,8 +8,8 @@ interface AuthenticatedRequest extends Request {
   user?: any;
 }
 
-const verifyCallback = 
-  (req: AuthenticatedRequest, resolve: Function, reject: Function, requiredRights: Permission[]) => 
+const verifyCallback =
+  (req: AuthenticatedRequest, resolve: () => void, reject: (error: ApiError) => void, requiredRights: Permission[]) =>
   async (err: any, user: any, info: any) => {
     if (err || info || !user) {
       return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
@@ -27,12 +27,14 @@ const verifyCallback =
     resolve();
   };
 
-const auth = (...requiredRights: Permission[]) => async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  return new Promise<void>((resolve, reject) => {
-    passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject, requiredRights))(req, res, next);
-  })
-    .then(() => next())
-    .catch((err) => next(err));
-};
+const auth =
+  (...requiredRights: Permission[]) =>
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    return new Promise<void>((resolve, reject) => {
+      passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject, requiredRights))(req, res, next);
+    })
+      .then(() => next())
+      .catch((err) => next(err));
+  };
 
 export default auth;

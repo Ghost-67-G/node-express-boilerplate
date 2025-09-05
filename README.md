@@ -1,51 +1,41 @@
-# RESTful API Node Server Boilerplate
+# Node Express TypeScript Boilerplate with Notes API
 
-[![Build Status](https://travis-ci.org/hagopj13/node-express-boilerplate.svg?branch=master)](https://travis-ci.org/hagopj13/node-express-boilerplate)
-[![Coverage Status](https://coveralls.io/repos/github/hagopj13/node-express-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/hagopj13/node-express-boilerplate?branch=master)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-A boilerplate/starter project for quickly building RESTful APIs using Node.js, Express, and Mongoose.
+A production-ready Node.js Express boilerplate built with **TypeScript**, featuring authentication, notes management, and organizational features. Built using Node.js, Express, TypeScript, and MongoDB with Mongoose.
 
-By running a single command, you will get a production-ready Node.js app installed and fully configured on your machine. The app comes with many built-in features, such as authentication using JWT, request validation, unit and integration tests, continuous integration, docker support, API documentation, pagination, etc. For more details, check the features list below.
+This boilerplate comes with comprehensive features including JWT authentication, request validation, error handling, logging, Docker support, and a complete Notes API with organizational structure support. Perfect for building scalable RESTful APIs quickly with full type safety.
 
 ## Quick Start
 
-To create a project, simply run:
+Clone the repository:
 
 ```bash
-npx create-nodejs-express-app <project-name>
-```
-
-Or
-
-```bash
-npm init nodejs-express-app <project-name>
-```
-
-## Manual Installation
-
-If you would still prefer to do the installation manually, follow these steps:
-
-Clone the repo:
-
-```bash
-git clone --depth 1 https://github.com/hagopj13/node-express-boilerplate.git
+git clone https://github.com/Ghost-67-G/node-express-boilerplate.git
 cd node-express-boilerplate
-npx rimraf ./.git
 ```
 
-Install the dependencies:
+Install dependencies:
 
 ```bash
+npm install
+# or
 yarn install
 ```
 
-Set the environment variables:
+Set up environment variables:
 
 ```bash
 cp .env.example .env
+# Edit .env file with your configuration
+```
 
-# open .env and modify the environment variables (if needed)
+Start the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
 ```
 
 ## Table of Contents
@@ -55,6 +45,7 @@ cp .env.example .env
 - [Environment Variables](#environment-variables)
 - [Project Structure](#project-structure)
 - [API Documentation](#api-documentation)
+- [API Endpoints](#api-endpoints)
 - [Error Handling](#error-handling)
 - [Validation](#validation)
 - [Authentication](#authentication)
@@ -62,56 +53,79 @@ cp .env.example .env
 - [Logging](#logging)
 - [Custom Mongoose Plugins](#custom-mongoose-plugins)
 - [Linting](#linting)
+- [Docker Support](#docker-support)
 - [Contributing](#contributing)
 
 ## Features
 
+- **TypeScript**: Full TypeScript support with strict type checking and modern ES features
 - **NoSQL database**: [MongoDB](https://www.mongodb.com) object data modeling using [Mongoose](https://mongoosejs.com)
-- **Authentication and authorization**: using [passport](http://www.passportjs.org)
+- **Notes Management**: Complete CRUD operations for notes with organizational structure support
+- **Authentication and authorization**: using [passport](http://www.passportjs.org) with JWT tokens
 - **Validation**: request data validation using [Joi](https://github.com/hapijs/joi)
 - **Logging**: using [winston](https://github.com/winstonjs/winston) and [morgan](https://github.com/expressjs/morgan)
-- **Testing**: unit and integration tests using [Jest](https://jestjs.io)
-- **Error handling**: centralized error handling mechanism
+- **Testing**: unit and integration test setup using [Jest](https://jestjs.io) with ts-jest
+- **Error handling**: centralized error handling mechanism with custom ApiError class
 - **API documentation**: with [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) and [swagger-ui-express](https://github.com/scottie1984/swagger-ui-express)
 - **Process management**: advanced production process management using [PM2](https://pm2.keymetrics.io)
-- **Dependency management**: with [Yarn](https://yarnpkg.com)
 - **Environment variables**: using [dotenv](https://github.com/motdotla/dotenv) and [cross-env](https://github.com/kentcdodds/cross-env#readme)
 - **Security**: set security HTTP headers using [helmet](https://helmetjs.github.io)
-- **Santizing**: sanitize request data against xss and query injection
+- **Sanitizing**: sanitize request data against xss and query injection
 - **CORS**: Cross-Origin Resource-Sharing enabled using [cors](https://github.com/expressjs/cors)
 - **Compression**: gzip compression with [compression](https://github.com/expressjs/compression)
-- **CI**: continuous integration with [Travis CI](https://travis-ci.org)
-- **Docker support**
-- **Code coverage**: using [coveralls](https://coveralls.io)
-- **Code quality**: with [Codacy](https://www.codacy.com)
+- **Docker support**: complete Docker setup for development and production
+- **Linting**: with [ESLint](https://eslint.org) and [Prettier](https://prettier.io) configured for TypeScript
 - **Git hooks**: with [husky](https://github.com/typicode/husky) and [lint-staged](https://github.com/okonet/lint-staged)
-- **Linting**: with [ESLint](https://eslint.org) and [Prettier](https://prettier.io)
-- **Editor config**: consistent editor configuration using [EditorConfig](https://editorconfig.org)
+- **Rate limiting**: API rate limiting for authentication endpoints
+- **Pagination**: built-in pagination support for API responses
+- **Type Safety**: Strong typing throughout the application for better development experience
 
 ## Commands
 
-Running locally:
+Building TypeScript:
 
 ```bash
+# Build TypeScript to JavaScript
+npm run build
+# or
+yarn build
+```
+
+Running locally in development mode:
+
+```bash
+npm run dev
+# or
 yarn dev
 ```
 
 Running in production:
 
 ```bash
-yarn start
+# First build the project
+npm run build
+# Then start the production server
+npm start
+# or
+yarn build && yarn start
 ```
 
 Testing:
 
 ```bash
 # run all tests
+npm test
+# or
 yarn test
 
 # run all tests in watch mode
+npm run test:watch
+# or
 yarn test:watch
 
 # run test coverage
+npm run coverage
+# or
 yarn coverage
 ```
 
@@ -119,12 +133,18 @@ Docker:
 
 ```bash
 # run docker container in development mode
+npm run docker:dev
+# or
 yarn docker:dev
 
 # run docker container in production mode
+npm run docker:prod
+# or
 yarn docker:prod
 
 # run all tests in a docker container
+npm run docker:test
+# or
 yarn docker:test
 ```
 
@@ -132,15 +152,23 @@ Linting:
 
 ```bash
 # run ESLint
+npm run lint
+# or
 yarn lint
 
 # fix ESLint errors
+npm run lint:fix
+# or
 yarn lint:fix
 
 # run prettier
+npm run prettier
+# or
 yarn prettier
 
 # fix prettier errors
+npm run prettier:fix
+# or
 yarn prettier:fix
 ```
 
@@ -162,6 +190,10 @@ JWT_SECRET=thisisasamplesecret
 JWT_ACCESS_EXPIRATION_MINUTES=30
 # Number of days after which a refresh token expires
 JWT_REFRESH_EXPIRATION_DAYS=30
+# Number of minutes after which a reset password token expires
+JWT_RESET_PASSWORD_EXPIRATION_MINUTES=10
+# Number of minutes after which a verify email token expires
+JWT_VERIFY_EMAIL_EXPIRATION_MINUTES=10
 
 # SMTP configuration options for the email service
 # For testing, you can use a fake SMTP service like Ethereal: https://ethereal.email/create
@@ -177,41 +209,70 @@ EMAIL_FROM=support@yourapp.com
 ```
 src\
  |--config\         # Environment variables and configuration related things
- |--controllers\    # Route controllers (controller layer)
- |--docs\           # Swagger files
+ |  |--config.ts    # Main configuration with type definitions
+ |  |--logger.ts    # Winston logger configuration
+ |  |--passport.ts  # Passport JWT strategy
+ |  |--roles.ts     # User roles and permissions
+ |  |--tokens.ts    # Token types enumeration
  |--middlewares\    # Custom express middlewares
- |--models\         # Mongoose models (data layer)
- |--routes\         # Routes
+ |--models\         # Mongoose models (data layer) with TypeScript interfaces
+ |  |--plugins\     # Custom mongoose plugins
+ |--routes\         # Routes with TypeScript
+ |  |--auth\        # Authentication routes, controllers, services, validations
+ |  |--notes\       # Notes routes, controllers, services, validations
  |--services\       # Business logic (service layer)
+ |--types\          # TypeScript type definitions and interfaces
  |--utils\          # Utility classes and functions
  |--validations\    # Request data validation schemas
- |--app.js          # Express app
- |--index.js        # App entry point
+ |--app.ts          # Express app with TypeScript
+ |--index.ts        # App entry point
+dist\               # Compiled JavaScript output (generated)
+tsconfig.json       # TypeScript configuration
 ```
+
+### Key Directories:
+
+- **config/**: Contains configuration files for database, JWT, logging, roles, and Passport strategies with full TypeScript support
+- **middlewares/**: Custom Express middlewares for authentication, validation, error handling, and rate limiting
+- **models/**: Mongoose models including User, Note, and Token models with TypeScript interfaces and custom plugins
+- **routes/**: API routes organized by feature (auth, notes) with modular TypeScript structure
+- **services/**: Business logic layer separated from controllers with proper typing
+- **types/**: TypeScript interfaces, types, and declarations for the entire application
+- **utils/**: Utility functions for error handling, async operations, and request filtering with type safety
+- **dist/**: Compiled JavaScript output directory (created after running `npm run build`)
 
 ## API Documentation
 
-To view the list of available APIs and their specifications, run the server and go to `http://localhost:3000/v1/docs` in your browser. This documentation page is automatically generated using the [swagger](https://swagger.io/) definitions written as comments in the route files.
+To view the list of available APIs and their specifications, run the server and go to `http://localhost:3000/api/docs` in your browser. This documentation page is automatically generated using the [swagger](https://swagger.io/) definitions written as comments in the route files.
 
-### API Endpoints
+## API Endpoints
 
 List of available routes:
 
 **Auth routes**:\
-`POST /v1/auth/register` - register\
-`POST /v1/auth/login` - login\
-`POST /v1/auth/refresh-tokens` - refresh auth tokens\
-`POST /v1/auth/forgot-password` - send reset password email\
-`POST /v1/auth/reset-password` - reset password\
-`POST /v1/auth/send-verification-email` - send verification email\
-`POST /v1/auth/verify-email` - verify email
+`POST /api/auth/register` - register a new user\
+`POST /api/auth/login` - login\
+`POST /api/auth/logout` - logout\
+`POST /api/auth/refresh-tokens` - refresh auth tokens\
+`POST /api/auth/forgot-password` - send reset password email\
+`POST /api/auth/reset-password` - reset password\
+`POST /api/auth/send-verification-email` - send verification email\
+`POST /api/auth/verify-email` - verify email
 
-**User routes**:\
-`POST /v1/users` - create a user\
-`GET /v1/users` - get all users\
-`GET /v1/users/:userId` - get user\
-`PATCH /v1/users/:userId` - update user\
-`DELETE /v1/users/:userId` - delete user
+**Notes routes**:\
+`POST /api/notes` - create a note (requires authentication and createNote permission)\
+`GET /api/notes` - get all notes with filtering and pagination (requires authentication and getNotes permission)\
+`GET /api/notes/:noteId` - get a specific note (requires authentication and getNote permission)\
+`PATCH /api/notes/:noteId` - update a note (requires authentication and manageNotes permission)\
+`DELETE /api/notes/:noteId` - delete a note (requires authentication and manageNotes permission)
+
+### Notes API Features:
+
+- **Organization Support**: Notes can be associated with organizations, families, and classes
+- **User Association**: Each note is linked to a user
+- **Search & Filter**: Notes can be filtered by title, user_id, family_id, and class_id
+- **Pagination**: Built-in pagination support for large datasets
+- **Full CRUD**: Complete Create, Read, Update, Delete operations
 
 ## Error Handling
 
@@ -308,16 +369,27 @@ The `auth` middleware can also be used to require certain rights/permissions to 
 ```javascript
 const express = require('express');
 const auth = require('../../middlewares/auth');
-const userController = require('../../controllers/user.controller');
+const notesController = require('./controller');
 
 const router = express.Router();
 
-router.post('/users', auth('manageUsers'), userController.createUser);
+router.post('/notes', auth('createNote'), notesController.create);
 ```
 
-In the example above, an authenticated user can access this route only if that user has the `manageUsers` permission.
+In the example above, an authenticated user can access this route only if that user has the `createNote` permission.
 
-The permissions are role-based. You can view the permissions/rights of each role in the `src/config/roles.js` file.
+The permissions are role-based. The current role structure includes:
+
+- **user**: Basic user role with limited permissions
+- **admin**: Administrative role with user management permissions
+
+**Available Permissions:**
+- `getUsers`: View user information
+- `manageUsers`: Full user management (create, update, delete users)
+- `createNote`: Create new notes
+- `getNotes`: View notes list
+- `getNote`: View specific note details  
+- `manageNotes`: Full note management (update, delete notes)
 
 If the user making the request does not have the required permissions to access this route, a Forbidden (403) error is thrown.
 
@@ -425,15 +497,57 @@ To prevent a certain file or directory from being linted, add it to `.eslintigno
 
 To maintain a consistent coding style across different IDEs, the project contains `.editorconfig`
 
+## Docker Support
+
+This project includes comprehensive Docker support for different environments:
+
+### Docker Files:
+- `Dockerfile`: Main Docker image configuration
+- `docker-compose.yml`: Base Docker Compose configuration
+- `docker-compose.dev.yml`: Development environment overrides
+- `docker-compose.prod.yml`: Production environment overrides  
+- `docker-compose.test.yml`: Testing environment overrides
+
+### Usage:
+
+**Development:**
+```bash
+npm run docker:dev
+# or
+yarn docker:dev
+```
+
+**Production:**
+```bash
+npm run docker:prod
+# or
+yarn docker:prod
+```
+
+**Testing:**
+```bash
+npm run docker:test
+# or
+yarn docker:test
+```
+
+The Docker setup uses Node.js Alpine image for smaller footprint and includes proper user permissions and security configurations.
+
 ## Contributing
 
 Contributions are more than welcome! Please check out the [contributing guide](CONTRIBUTING.md).
 
+## Repository Information
+
+**Author**: Ayan Naseer (ayannaseerg67@gmail.com)  
+**Repository**: [https://github.com/Ghost-67-G/node-express-boilerplate](https://github.com/Ghost-67-G/node-express-boilerplate)  
+**License**: MIT
+
 ## Inspirations
 
+- [hagopj13/node-express-boilerplate](https://github.com/hagopj13/node-express-boilerplate)
 - [danielfsousa/express-rest-es2017-boilerplate](https://github.com/danielfsousa/express-rest-es2017-boilerplate)
 - [madhums/node-express-mongoose](https://github.com/madhums/node-express-mongoose)
-- [kunalkapadia/express-mongoose-es6-rest-api](https://github.com/kunalkapadia/express-mongoose-es6-rest-api)
 
 ## License
 

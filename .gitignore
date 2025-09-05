@@ -11,3 +11,9 @@ yarn-error.log
 
 # Code coverage
 coverage
+
+# TypeScript build output
+dist
+
+# TypeScript cache
+*.tsbuildinfo

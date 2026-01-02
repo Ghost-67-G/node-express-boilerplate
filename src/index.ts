@@ -17,10 +17,10 @@ const exitHandler = (): void => {
   if (server) {
     server.close(() => {
       logger.info('Server closed');
-      process.exit(1);
+      process.exit(0);
     });
   } else {
-    process.exit(1);
+    process.exit(0);
   }
 };
 
@@ -35,6 +35,13 @@ process.on('unhandledRejection', unexpectedErrorHandler);
 process.on('SIGTERM', () => {
   logger.info('SIGTERM received');
   if (server) {
-    server.close();
+    server.close(() => {
+      logger.info('Server closed gracefully');
+    });
   }
+});
+
+process.on('SIGINT', () => {
+  logger.info('SIGINT received');
+  exitHandler();
 });

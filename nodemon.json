@@ -1,0 +1,9 @@
+{
+  "watch": ["src"],
+  "ext": "ts,js",
+  "ignore": ["node_modules", "dist"],
+  "exec": "env-cmd -f .env.development cross-env NODE_ENV=development ts-node --transpile-only src/index.ts",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

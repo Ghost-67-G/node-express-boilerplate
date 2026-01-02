@@ -16,7 +16,8 @@ const errorConverter = (err: any, _req: Request, _res: Response, next: NextFunct
   next(error);
 };
 
-const errorHandler = (err: ApiError, _req: Request, res: Response) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const errorHandler = (err: ApiError, req: Request, res: Response, _next: NextFunction) => {
   let { statusCode, message } = err;
   if (config.env === 'production' && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
@@ -31,7 +32,20 @@ const errorHandler = (err: ApiError, _req: Request, res: Response) => {
     ...(config.env === 'development' && { stack: err.stack }),
   };
 
+  // Only log errors that are not common client errors
   if (config.env === 'development') {
+    if (statusCode >= 500) {
+      // Server errors - log with full details
+      logger.error(err);
+    } else if (statusCode === 404) {
+      // 404 errors - just log the path that was not found
+      logger.warn(`404 Not Found: ${req.method} ${req.path}`);
+    } else if (statusCode >= 400) {
+      // Other client errors - log basic info
+      logger.warn(`${statusCode} ${message}: ${req.method} ${req.path}`);
+    }
+  } else if (statusCode >= 500) {
+    // Production - only log server errors
     logger.error(err);
   }
 

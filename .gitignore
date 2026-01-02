@@ -1,0 +1,19 @@
+# Dependencies
+node_modules
+
+# yarn error logs
+yarn-error.log
+
+# Environment varibales
+.env*
+!.env*.example
+!.env*.development
+
+# Code coverage
+coverage
+
+# TypeScript build output
+dist
+
+# TypeScript cache
+*.tsbuildinfo
